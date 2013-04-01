@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130401174652) do
+ActiveRecord::Schema.define(:version => 20130401203141) do
 
   create_table "comments", :force => true do |t|
     t.text     "body"
@@ -21,12 +21,23 @@ ActiveRecord::Schema.define(:version => 20130401174652) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "link_tags", :force => true do |t|
+    t.integer "link_id"
+    t.integer "tag_id"
+  end
+
   create_table "links", :force => true do |t|
     t.string   "url_long"
     t.string   "url_short"
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "tags", :force => true do |t|
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "users", :force => true do |t|
