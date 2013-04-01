@@ -32,4 +32,14 @@ class Link < ActiveRecord::Base
     SecureRandom.urlsafe_base64(3)
   end
 
+  def get_url(user_id)
+    Visit.create(user_id, self.id)
+
+    self.long_url.url
+  end
+
+  def visit_count
+    Visit.where(:link_id => self.id).count
+  end
+
 end
