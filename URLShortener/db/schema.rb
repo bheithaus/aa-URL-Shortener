@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130401203141) do
+ActiveRecord::Schema.define(:version => 20130401213227) do
 
   create_table "comments", :force => true do |t|
     t.text     "body"
@@ -27,9 +27,15 @@ ActiveRecord::Schema.define(:version => 20130401203141) do
   end
 
   create_table "links", :force => true do |t|
-    t.string   "url_long"
     t.string   "url_short"
     t.integer  "user_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "long_url_id"
+  end
+
+  create_table "long_urls", :force => true do |t|
+    t.string   "url"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
