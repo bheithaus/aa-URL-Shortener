@@ -1,4 +1,4 @@
 class LinkTag < ActiveRecord::Base
-  belongs_to :links
-  belongs_to :tags
+  belongs_to :link
+  belongs_to :tag
 end
