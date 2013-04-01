@@ -42,4 +42,7 @@ class Link < ActiveRecord::Base
     Visit.where(:link_id => self.id).count
   end
 
+  def uniques
+    Visit.select("DISTINCT user_id").where(:link_id => self.id).count
+  end
 end
