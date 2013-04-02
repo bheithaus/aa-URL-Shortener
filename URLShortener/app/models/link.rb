@@ -38,11 +38,21 @@ class Link < ActiveRecord::Base
     self.long_url.url
   end
 
-  def visit_count
-    Visit.where(:link_id => self.id).count
+  def visit_count(t = nil)
+    unless t
+      return Visit.where(:link_id => self.id).count
+    else
+      return Visit.where('link_id = ? AND created_at > ?', self.id, (Time.now) - t*60).count
+      # return Visit.where(:link_id => self.id).where('created_at > ?', (Time.now) - t*60).count
+    end
   end
 
   def uniques
     Visit.select("DISTINCT user_id").where(:link_id => self.id).count
   end
+
+  def ten_min_count
+    Visit.where(:link_id => self.id).where('created_at > ?', (Time.now) - 40*60).count
+  end
+
 end
