@@ -1,4 +1,6 @@
 class Tag < ActiveRecord::Base
+  validates :description, :presence => true
+
   has_many :link_tags
   has_many :links, :through => :link_tags
 
