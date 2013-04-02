@@ -5,6 +5,14 @@ class User < ActiveRecord::Base
   has_many :comments
   has_many :visits  #visits to links
 
+  def leave_comment(link_id, body)
+    Comment.create(:body => body, :user_id => self.id, :link_id => link_id)
+  end
+
+  def add_tag(link_id, tag_id)
+    LinkTag.create(:link_id => link_id, :tag_id => tag_id)
+  end
+
   # def self.make(username, email)
   #   user = User.create()
   #
