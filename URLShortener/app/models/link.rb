@@ -13,27 +13,23 @@ class Link < ActiveRecord::Base
   has_many :users, :through => :visits
   has_many :tags, :through => :link_tags
 
-  def self.create(user, url)
+  def self.make(user, url)
     if user.links.any? { |link| link.long_url.url == url }
       raise 'You already entered this url.'
     else ##shortcut?
-      new_long = LongUrl.create(url)
-      new_short = Link.new
-      new_short.user_id = user.id
-      new_short.long_url_id = new_long.id
-      new_short.url_short = new_short.generate_short
-      new_short.save
-
-      new_short
+      new_long_id = LongUrl.create(:url => url).id
+      new_short = generate_short
+      return Link.create(:long_url_id => new_long_id, :user_id => user.id,
+                          :url_short => new_short)
     end
   end
 
-  def generate_short
+  def self.generate_short
     SecureRandom.urlsafe_base64(3)
   end
 
   def get_url(user_id)
-    Visit.create(user_id, self.id)
+    Visit.create(:user_id => user_id, :link_id => self.id)
 
     self.long_url.url
   end
@@ -43,7 +39,6 @@ class Link < ActiveRecord::Base
       return Visit.where(:link_id => self.id).count
     else
       return Visit.where('link_id = ? AND created_at > ?', self.id, (Time.now) - t*60).count
-      # return Visit.where(:link_id => self.id).where('created_at > ?', (Time.now) - t*60).count
     end
   end
 
@@ -51,8 +46,8 @@ class Link < ActiveRecord::Base
     Visit.select("DISTINCT user_id").where(:link_id => self.id).count
   end
 
-  def ten_min_count
-    Visit.where(:link_id => self.id).where('created_at > ?', (Time.now) - 40*60).count
-  end
+  # def ten_min_count
+  #   Visit.where(:link_id => self.id).where('created_at > ?', (Time.now) - 40*60).count
+  # end
 
 end
